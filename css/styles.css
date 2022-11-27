@@ -14,6 +14,9 @@
   --hero-bg: #c4c4c4;
   --hero-bg-gradient: rgba(47, 48, 58, 0.4);
   --social-links-color: #afb1b8;
+
+  --trans-duration: 250ms;
+  --cubic: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* * {
@@ -105,12 +108,19 @@ img {
   background-color: var(--header-bg);
 }
 
+.title {
+  font-size: 14px;
+  line-height: 1.14;
+  text-transform: uppercase;
+}
+
 /* хедер */
 .header {
   background-color: var(--header-bg);
   border-bottom: 1px solid var(--header-frame);
   padding-top: 24px;
   padding-bottom: 25px;
+  height: 80px;
 }
 
 .header-items {
@@ -152,15 +162,20 @@ img {
   margin-right: 50px;
 } */
 
+.site-nav-item {
+}
+
 .site-nav-link.link {
-  display: block;
+  position: relative;
 
   color: var(--secondary-text-color);
   font-weight: 500;
   line-height: 1.14;
   letter-spacing: 0.02em;
-  /* padding-top: 7.5px;
-  padding-bottom: 7.5px; */
+  padding-top: 32px;
+  padding-bottom: 32px;
+
+  transition: color var(--trans-duration) var(--cubic);
 }
 
 .site-nav-link:hover,
@@ -170,6 +185,20 @@ img {
 
 .site-nav-link.current {
   color: var(--accent-color);
+}
+
+.site-nav-link.current::after {
+  content: "";
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+  height: 4px;
+
+  border-radius: 2px;
+  background-color: var(--accent-color);
 }
 
 .contacts {
@@ -189,6 +218,8 @@ img {
   font-weight: 500;
   line-height: 1.14;
   letter-spacing: 0.02em;
+
+  transition: color var(--trans-duration) var(--cubic);
 }
 
 .contact-icon {
@@ -212,10 +243,10 @@ img {
     ),
     url(../images/hero-bg-image.jpg);
   background-color: var(--hero-bg);
-  width: 1600px;
+  max-width: 1600px;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
+  background-size: cover;
   padding-top: 200px;
   padding-bottom: 200px;
   margin: 0 auto;
@@ -240,14 +271,82 @@ img {
   min-width: 216px;
   margin: 0 auto;
 
+  display: flex;
+
   background-color: var(--accent-color);
   color: var(--header-bg);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
 
   font-weight: 700;
   line-height: 1.8;
-  display: flex;
   letter-spacing: 0.06em;
+}
+
+.hero-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.2);
+
+  visibility: visible;
+  opacity: 1;
+  transition: opacity var(--trans-duration) var(--cubic),
+    visibility var(--trans-duration) var(--cubic);
+}
+
+.hero-backdrop.is-hidden {
+  visibility: hidden;
+  pointer-events: none;
+
+  opacity: 0;
+}
+
+.hero-backdrop.is-hidden .hero-modal {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.hero-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  min-width: 528px;
+  min-height: 581px;
+
+  background-color: var(--header-bg);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform var(--trans-duration) var(--cubic);
+}
+
+.modal-btn-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+
+  transition: background-color var(--trans-duration) var(--cubic);
+}
+
+.modal-btn-close:hover {
+  background-color: var(--accent-color);
 }
 
 /* секції Наші переваги і Чим ми займаємося */
@@ -284,9 +383,6 @@ img {
 .features-title {
   margin-bottom: 10px;
   color: var(--secondary-text-color);
-  font-size: 14px;
-  line-height: 1.14;
-  text-transform: uppercase;
 }
 
 .features-text {
@@ -300,6 +396,29 @@ img {
 .work-list {
   display: flex;
   gap: 30px;
+}
+
+.work-thumb {
+  position: relative;
+  z-index: 0;
+}
+
+.work-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 70px;
+  background: rgba(47, 48, 58, 0.8);
+}
+
+.work-title {
+  color: var(--header-bg);
 }
 
 /* секція Команда */
@@ -360,6 +479,9 @@ img {
   border-radius: 50%;
   background-color: var(--header-bg);
   fill: var(--client-section-grey);
+
+  transition: background-color var(--trans-duration) var(--cubic),
+    fill var(--trans-duration) var(--cubic);
 }
 
 /* .social-icon {
@@ -393,6 +515,9 @@ img {
   border: 1px solid var(--client-section-grey);
   border-radius: 4px;
   fill: var(--client-section-grey);
+
+  transition: border-color var(--trans-duration) var(--cubic),
+    fill var(--trans-duration) var(--cubic);
 }
 
 /* .client-icon {
@@ -427,6 +552,10 @@ img {
   font-weight: 500;
   line-height: 1.6;
   letter-spacing: 0.03em;
+
+  transition: background-color var(--trans-duration) var(--cubic),
+    color var(--trans-duration) var(--cubic),
+    box-shadow var(--trans-duration) var(--cubic);
 }
 
 .projects-button:hover,
@@ -453,12 +582,45 @@ img {
 
 .project-link {
   display: block;
+  box-shadow: none;
+  transition: box-shadow var(--trans-duration) var(--cubic);
+}
+
+.project-thumb {
+  position: relative;
+  overflow: hidden;
+}
+
+.project-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+  padding: 63px 24px;
+
+  background-color: rgba(33, 150, 243, 0.9);
+
+  transform: translateY(100%);
+  transition: transform var(--trans-duration) var(--cubic);
 }
 
 .project-link:hover,
 .project-link:focus {
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.06),
     1px 4px 6px rgba(0, 0, 0, 0.16);
+}
+
+.project-link:hover .project-overlay,
+.project-link:focus .project-overlay {
+  transform: translateY(0);
+}
+
+.project-text {
+  font-size: 18px;
+  line-height: 1.56;
+  color: var(--header-bg);
 }
 
 .project-description {
@@ -521,10 +683,14 @@ img {
 
 .address-link.primary {
   color: var(--header-bg);
+
+  transition: color var(--trans-duration) var(--cubic);
 }
 
 .address-link.secondary {
   color: var(--text-footer-color);
+
+  transition: color var(--trans-duration) var(--cubic);
 }
 
 .address-link.primary:hover,
@@ -565,6 +731,8 @@ img {
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.1);
   fill: var(--header-bg);
+
+  transition: background-color var(--trans-duration) var(--cubic);
 }
 
 /* .footer-social-icon {
